@@ -1,0 +1,3 @@
+[submodule "samples/nottetris"]
+	path = samples/nottetris
+	url = https://github.com/spacewave1/nottetris2
