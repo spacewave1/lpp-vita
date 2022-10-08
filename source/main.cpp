@@ -9,7 +9,14 @@ extern "C"{
 	#include "include/ftp/ftp.h"
 }
 
-int _newlib_heap_size_user = 192 * 1024 * 1024;
+#ifndef SYS_APP_MODE
+unsigned int _newlib_heap_size_user = 192 * 1024 * 1024;
+#else
+unsigned int _newlib_heap_size_user = 16 * 1024 * 1024;
+#endif
+
+extern int _newlib_heap_memblock; // Newlib Heap memblock
+extern unsigned _newlib_heap_size; // Newlib Heap size
 
 static const char* errMsg;
 static unsigned char* script;
@@ -19,7 +26,6 @@ SceCommonDialogConfigParam cmnDlgCfgParam;
 
 int main()
 {
-
 	// Initializing touch screens and analogs
 	sceCtrlSetSamplingMode(SCE_CTRL_MODE_ANALOG_WIDE);
 	sceTouchSetSamplingState(SCE_TOUCH_PORT_FRONT, SCE_TOUCH_SAMPLING_STATE_START);
@@ -54,6 +60,14 @@ int main()
 	vita2d_set_vblank_wait(0);
 	clr_color = 0x000000FF;
 	debug_font = vita2d_load_default_pgf();
+	
+	// Getting newlib heap memblock starting address
+	void *addr = NULL;
+	sceKernelGetMemBlockBase(_newlib_heap_memblock, &addr);
+
+	// Mapping newlib heap into sceGxm
+	sceGxmMapMemory(addr, _newlib_heap_size, SCE_GXM_MEMORY_ATTRIB_READ | SCE_GXM_MEMORY_ATTRIB_WRITE);
+	
 	
 	SceCtrlData pad;
 	SceCtrlData oldpad;

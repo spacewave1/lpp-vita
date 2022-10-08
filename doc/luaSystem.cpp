@@ -35,6 +35,16 @@ enum PowerTimer{
 };
 
 /**
+ * Image format modes to use with ::System.takeScreenshot.
+ * \ingroup System
+ */
+enum ImgFmt{
+	FORMAT_BMP,  //!< 32bpp BMP format.
+	FORMAT_JPG,  //!< JPG format.
+	FORMAT_PNG  //!< 8bpp paletted PNG format.
+};
+
+/**
  * Buttons schemes for ::System.setMessage.
  * \ingroup System
  */
@@ -54,6 +64,15 @@ enum DlgState{
 	RUNNING,   //!< Dialog running.
 	FINISHED,  //!< Dialog finished successfully.
 	CANCELED   //!< Dialog canceled by user.
+};
+
+/**
+ * Mount permissions for partition mounting.
+ * \ingroup System
+ */
+enum MntPerm{
+	READ_ONLY,  //!< Read only permissions.
+	READ_WRITE  //!< Read/Write permissions.
 };
 
 class System{
@@ -239,6 +258,20 @@ class System{
 		void rename(string filename, string filename2);
 		
 		/**
+		 * Copy a file.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * System.copyFile("ux0:/data/old.txt", "ux0:/data/new.txt")
+		 * @endcode
+		 *
+		 * @param filename - Filename to be copied.
+		 * @param filename2 - New filename.
+		 */
+		void copyFile(string filename, string filename2);
+		
+		/**
 		 * Delete a file.
 		 * \ingroup System
 		 *
@@ -399,7 +432,7 @@ class System{
 		 * life = System.getBatteryLife()
 		 * @endcode
 		 *
-		 * @return The battery life in seconds.
+		 * @return The battery life in minutes.
 		 */
 		int getBatteryLife(void);
 		
@@ -482,7 +515,7 @@ class System{
 		int getBatteryCycles(void);
 		
 		/**
-		 * Disables a power management timer feature.
+		 * Disable a power management timer feature.
 		 * \ingroup System
 		 *
 		 * @par Usage example:
@@ -495,7 +528,7 @@ class System{
 		void disableTimer(PowerTimer timer);
 		
 		/**
-		 * Enables a power management timer feature.
+		 * Enable a power management timer feature.
 		 * \ingroup System
 		 *
 		 * @par Usage example:
@@ -506,6 +539,19 @@ class System{
 		 * @param timer - The timer feature to enable.
 		 */
 		void enableTimer(PowerTimer timer);
+		
+		/**
+		 * Reset a power management timer feature.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * System.resetTimer(SCREEN_DIMMING_TIMER)
+		 * @endcode
+		 *
+		 * @param timer - The timer feature to reset.
+		 */
+		void resetTimer(PowerTimer timer);
 		
 		/**
 		 * Set CPU clock speed.
@@ -812,13 +858,10 @@ class System{
 		 *
 		 * @param filename - The filename to extract.
 		 * @param dirname - The path where to extract files.
-		 * @param password - The password of the archive <b>(optional)</b>.
-		 *
-		 * @return 1 if extraction completed successfully, 0 otherwise.
 		 *
 		 * @note If <b>dirname</b> doesn't exist, it will be automatically created.
 		 */
-		int extractZip(string filename, string dirname, string password);
+		void extractZip(string filename, string dirname);
 		
 		/**
 		 * Extract a specific file from a ZIP file (synchronous).
@@ -826,19 +869,14 @@ class System{
 		 *
 		 * @par Usage example:
 		 * @code
-		 * System.extractFromZip("app0:/files.zip", "image.jpg" "ux0:/data/app_files")
+		 * System.extractFromZip("app0:/files.zip", "image.jpg", "ux0:/data/app_files/my_image.jpg")
 		 * @endcode
 		 *
 		 * @param filename - The filename of the ZIP archive.
 		 * @param file - The file to extract.
-		 * @param dirname - The path where to extract file.
-		 * @param password - The password of the archive <b>(optional)</b>.
-		 *
-		 * @return true if file extraced, false otherwise.
-		 *
-		 * @note If <b>dirname</b> doesn't exist, it will be automatically created.
+		 * @param destname - The filename where to extract file.
 		 */
-		bool extractFromZip(string filename, string file, string dirname, string password);
+		void extractFromZip(string filename, string file, string destname);
 		
 		/**
 		 * Extract a ZIP file (asynchronous).
@@ -851,11 +889,10 @@ class System{
 		 *
 		 * @param filename - The filename to extract.
 		 * @param dirname - The path where to extract files.
-		 * @param password - The password of the archive <b>(optional)</b>.
 		 *
 		 * @note If <b>dirname</b> doesn't exist, it will be automatically created.
 		 */
-		void extractZipAsync(string filename, string dirname, string password);
+		void extractZipAsync(string filename, string dirname);
 		
 		/**
 		 * Extract a specific file from a ZIP file (asynchronous).
@@ -863,17 +900,49 @@ class System{
 		 *
 		 * @par Usage example:
 		 * @code
-		 * System.extractFromZipAsync("app0:/files.zip", "image.jpg" "ux0:/data/app_files")
+		 * System.extractFromZipAsync("app0:/files.zip", "image.jpg", "ux0:/data/app_files/my_image.jpg")
 		 * @endcode
 		 *
 		 * @param filename - The filename of the ZIP archive.
 		 * @param file - The file to extract.
-		 * @param dirname - The path where to extract file.
-		 * @param password - The password of the archive <b>(optional)</b>.
-		 *
-		 * @note If <b>dirname</b> doesn't exist, it will be automatically created.
+		 * @param destname - The filename where to extract file.
 		 */
-		void extractFromZipAsync(string filename, string file, string dirname, string password);
+		void extractFromZipAsync(string filename, string file, string destname);
+		
+		/**
+		 * Compress a file or a folder in a ZIP file (synchronous).
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * System.compressZip("app0:/sce_sys", "ux0:/data/file.zip", 9)
+		 * @endcode
+		 *
+		 * @param path - The filename or path to compress.
+		 * @param filename - The filename of the resulting zip file.
+		 * @param ratio - The compression ratio to use <b>(optional)</b>.
+		 *
+		 * @note <b>ratio</b> must be between 0 and 9.
+		 */
+		void compressZip(string path, string filename, int ratio);
+		
+		/**
+		 * Add a file or a folder in a ZIP file (synchronous).
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * System.addToZip("app0:/sce_sys/icon0.png", "ux0:/data/file.zip", "sce_sys", 9)
+		 * @endcode
+		 *
+		 * @param path - The filename or path to compress.
+		 * @param filename - The filename of the resulting zip file.
+		 * @param parent - The parent folder inside the zip file where to place the path.
+		 * @param ratio - The compression ratio to use <b>(optional)</b>.
+		 *
+		 * @note <b>ratio</b> must be between 0 and 9.
+		 */
+		void addToZip(string path, string filename, string parent, int ratio);
 		
 		/**
 		 * Get current state of an asynchronous task.
@@ -912,16 +981,16 @@ class System{
 		 *
 		 * @par Usage example:
 		 * @code
-		 * System.takeScreenshot("ux0:/data/shot.jpg", true, 255)
+		 * System.takeScreenshot("ux0:/data/shot.jpg", FORMAT_JPG, 255)
 		 * @endcode
 		 *
 		 * @param filename - The filename of the screenshot output.
-		 * @param use_jpg - JPG compression feature <b>(optional)</b>.
+		 * @param format - The format to use for the output file <b>(optional)</b>.
 		 * @param ratio - Compression ratio for JPG compression <b>(optional)</b>.
 		 *
 		 * @note <b>ratio</b> must be between 0 and 255.
 		 */
-		void takeScreenshot(string filename, bool use_jpg, int ratio);
+		void takeScreenshot(string filename, ImgFmt format, int ratio);
 		
 		/**
 		 * Execute an URI call.
@@ -929,7 +998,7 @@ class System{
 		 *
 		 * @par Usage example:
 		 * @code
-		 * System.executeURI("psgm:play?titleid=MLCL00001")
+		 * System.executeUri("psgm:play?titleid=MLCL00001")
 		 * @endcode
 		 *
 		 * @param uri - URI to exec.
@@ -946,6 +1015,28 @@ class System{
 		 * @endcode
 		 */
 		int reboot(void);
+		
+		/**
+		 * Shutdown the console.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * System.shutdown()
+		 * @endcode
+		 */
+		int shutdown(void);
+		
+		/**
+		 * Put the console in standby.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * System.standby()
+		 * @endcode
+		 */
+		int standby(void);
 		
 		/**
 		 * Get if application is running in safe mode.
@@ -1033,5 +1124,179 @@ class System{
 		 * @endcode
 		 */
 		void closeMessage(void);
+		
+		/**
+		 * Unmount an already mounted partition.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * System.unmountPartition(0x300)
+		 * @endcode
+		 *
+		 * @param idx - The index number of the partition.
+		 *
+		 * @note For the index value, look at VSH Mount ID <a href="https://wiki.henkaku.xyz/vita/SceIofilemgr#Mount_Points">here</a>.
+		 * @note This function is available only in unsafe mode.
+		 */
+		void unmountPartition(int idx);
+		
+		/**
+		 * Mount an unmounted partition.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * System.mountPartition(0x300, READ_WRITE)
+		 * @endcode
+		 *
+		 * @param idx - The index number of the partition.
+		 * @param perms - Permissions to set for the mounted partition.
+		 *
+		 * @note For the index value, look at VSH Mount ID <a href="https://wiki.henkaku.xyz/vita/SceIofilemgr#Mount_Points">here</a>.
+		 * @note This function is available only in unsafe mode.
+		 */
+		void mountPartition(int idx, MntPerm perms);
+		
+		/**
+		 * Install an extracted app.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * System.installApp("ux0:/vitaQuake")
+		 * @endcode
+		 *
+		 * @param dir - The path to the extracted app.
+		 *
+		 * @note This function is available only in unsafe mode.
+		 */
+		void installApp(string dir);
+		
+		/**
+		 * Uninstall an installed app.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * System.uninstallApp("GTAVCECTY")
+		 * @endcode
+		 *
+		 * @param titleid - The titleid of the app to uninstall.
+		 *
+		 * @note This function is available only in unsafe mode.
+		 */
+		void uninstallApp(string titleid);
+		
+		/**
+		 * Check if an app is installed.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * if System.doesAppExist("GTAVCECTY") then
+		 *  System.uninstallApp("GTAVCECTY")
+		 * end
+		 * @endcode
+		 *
+		 * @param titleid - The titleid of the app to check.
+		 *
+		 * @return true if installed, false otherwise.
+		 *
+		 * @note This function is available only in unsafe mode.
+		 */
+		bool doesAppExist(string titleid);
+		
+		/**
+		 * Retrieve params used at app boot.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * args = System.getBootParams()
+		 * @endcode
+		 *
+		 * @return The params passed to the app when it got launched.
+		 */
+		string getBootParams(void);
+		
+		/**
+		 * Load and start an user plugin.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * plug_id = System.loadUserPlugin("ux0:data/plugin.suprx")
+		 * @endcode
+		 *
+		 * @param path - The path to the plugin to load.
+		 *
+		 * @return An identifier to the loaded module.
+		 *
+		 * @note This function is available only in unsafe mode.
+		 */
+		int loadUserPlugin(string path);
+		
+		/**
+		 * Load and start a kernel plugin.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * plug_id = System.loadKernelPlugin("ux0:data/plugin.skprx")
+		 * @endcode
+		 *
+		 * @param path - The path to the plugin to load.
+		 *
+		 * @return An identifier to the loaded module.
+		 *
+		 * @note This function is available only in unsafe mode.
+		 */
+		int loadKernelPlugin(string path);
+		
+		/**
+		 * Stop and unload an user plugin.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * System.unloadUserPlugin(plug_id)
+		 * @endcode
+		 *
+		 * @param plug_id - The module identifier for the plugin to unload.
+		 *
+		 * @note This function is available only in unsafe mode.
+		 */
+		void unloadUserPlugin(int plug_id);
+		
+		/**
+		 * Stop and unload a kernel plugin.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * System.unloadKernelPlugin(plug_id)
+		 * @endcode
+		 *
+		 * @param plug_id - The module identifier for the plugin to unload.
+		 *
+		 * @note This function is available only in unsafe mode.
+		 */
+		void unloadUserPlugin(int plug_id);
+		
+		/**
+		 * Unmount a virtual mountpoint.
+		 * \ingroup System
+		 *
+		 * @par Usage example:
+		 * @code
+		 * System.unmountMountpoint("app0:")
+		 * @endcode
+		 *
+		 * @param mnt - The mountpoint to unmount.
+		 *
+		 * @note This function is available only in unsafe mode.
+		 */
+		void unmountMountpoint(string mnt);
 
 }

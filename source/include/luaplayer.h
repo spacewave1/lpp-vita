@@ -62,6 +62,8 @@ void luaRender_init(lua_State *L);
 void luaMic_init(lua_State *L);
 void luaVideo_init(lua_State *L);
 void luaDatabase_init(lua_State *L);
+void luaRegistry_init(lua_State *L);
+void luaGui_init(lua_State *L);
 void bitlib_init(lua_State *L);
 
 // lua-compat
@@ -90,7 +92,8 @@ extern float video_audio_tick;
 // Internal structs
 struct lpp_texture{
 	uint32_t magic;
-	vita2d_texture* text;
+	vita2d_texture *text;
+	void *data;
 };
 
 struct DecodedMusic{
@@ -108,7 +111,6 @@ struct DecodedMusic{
 	char title[256];
 	char author[256];
 	bool tempBlock;
-	bool isVideoTrack;
 };
 
 #endif

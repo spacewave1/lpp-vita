@@ -2,7 +2,7 @@
 	<img src="https://github.com/gnmmarechal/lpp-vita/raw/master/banner.png?raw=true"/>
 </p>
 
-[![Documentation](https://travis-ci.org/Rinnegatamante/lpp-vita.png?branch=master)](https://travis-ci.org/Rinnegatamante/lpp-vita) [![Build Status](https://dev.azure.com/rinnegatamante/lpp-vita/_apis/build/status/Rinnegatamante.lpp-vita?branchName=master)](https://dev.azure.com/rinnegatamante/lpp-vita/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/rinnegatamante/lpp-vita/_apis/build/status/Rinnegatamante.lpp-vita?branchName=master)](https://dev.azure.com/rinnegatamante/lpp-vita/_build/latest?definitionId=1&branchName=master)
 
 # Description
 
@@ -19,9 +19,10 @@ Official documentation: http://rinnegatamante.github.io/lpp-vita/
 
 * Advanced 2D Graphics Rendering (GPU).
 * Basic 3D Graphics Rendering (GPU).
-* Native support to 0BJ models.
+* Native support to OBJ models.
 * Native support to TTF/PGF/PVF/OTF fonts.
 * Native support to BMP/PNG/JPG images.
+* Native support to GIF animated images.
 * Built-in rescaler to perform portings from [lpp-3ds](https://github.com/Rinnegatamante/lpp-3ds) easily.
 
 ##### Multimedia
@@ -32,7 +33,7 @@ Official documentation: http://rinnegatamante.github.io/lpp-vita/
 	* Moving Picture Expert Group-1/2 Audio Layer 3 audio files (**.mp3**) with MPEG-1 Audio Layer III/MPEG-2 Audio Layer III codecs.
 	* Musical Instrument Digital Interface audio files (**.midi**).
 	* Ogg Media audio files (**.ogg/.opus**) with Vorbis/Opus codecs.
-* Native support to PSHV video files.
+* Native support to MP4 video files with support for **.srt** and **.vtt** subtitles files.
 	
 ##### Controls
 
@@ -57,6 +58,7 @@ Official documentation: http://rinnegatamante.github.io/lpp-vita/
 * Native support to ZIP archives.
 * Native support to SFO file descriptors.
 * Native support to SQLite databases.
+* Native support to apps installation/uninstallation.
 
 ##### Utilities
 
@@ -132,5 +134,7 @@ Lua Player Plus Vita supports different flags to enables some features:<br>
 * **hyln9** for vita-luajit.
 * **frangarcj** for the help during 3D rendering feature addition.
 * **TheFloW** for some snippets i used and some ideas i borrowed.
-* Misledz for the Lua Player Plus logo.
-* EasyRPG Team for the Audio Decoder used for Sound module.
+* **Misledz** for the Lua Player Plus logo.
+* **Arkanite** for providing a sample for sceAvPlayer used to implement the Video module.
+* **EasyRPG Team** for the Audio Decoder used for Sound module.
+* **lecram** for gifdec usd for animated GIFs support.

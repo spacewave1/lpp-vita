@@ -4,15 +4,6 @@
  */ 
 
 /**
- * Loop mode for Sound.play.
- * \ingroup Sound
- */
-enum LoopMode{
-	NO_LOOP,     //!< Non-loop mode
-	LOOP         //!< Loop mode
-};
-
-/**
  * Shutter sound IDs for Sound.playShutter.
  * \ingroup Sound
  */
@@ -68,7 +59,7 @@ class Sound {
 		int open(string filename);
 		
 		/**
-		 * Plays a sound.
+		 * Play a sound.
 		 * \ingroup Sound
 		 *
 		 * @par Usage example:
@@ -77,9 +68,9 @@ class Sound {
 		 * @endcode
 		 *
 		 * @param music - A valid sound ID.
-		 * @param loop - Loop mode.
+		 * @param loop - If true, playback will loop <b>(optional)</b>.
 		 */
-		void play(int music, LoopMode loop);
+		void play(int music, bool loop);
 		
 		/**
 		 * Pause a sound.
@@ -181,7 +172,7 @@ class Sound {
 		 *
 		 * @return Song title of the given sound.
 		 *
-		 * @note This function works only with OGG and WAV audio files.
+		 * @note This function works only with .ogg, .mp3, .opus and .wav audio files.
 		 */
 		string getTitle(int music);
 		
@@ -198,7 +189,7 @@ class Sound {
 		 *
 		 * @return Song author of the given sound.
 		 *
-		 * @note This function works only with OGG, MP3 and WAV audio files.
+		 * @note This function works only with .ogg, .mp3, .opus and .wav audio files.
 		 */
 		string getAuthor(int music);
 		

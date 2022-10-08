@@ -83,7 +83,7 @@ class Graphics {
 		 *
 		 * @param x - X coordinate of the pixel.
 		 * @param y - Y coordinate of the pixel.
-		 * @param img - A valid image id.
+		 * @param img - A valid image ID.
 		 *
 		 * @return The pixel color value (See ::Color).
 		 */
@@ -154,7 +154,7 @@ class Graphics {
 		 * @param rad - Radius size of the circle.
 		 * @param color - A valid color (See ::Color).
 		 */
-		void fillCircle(number x1, number y1, number rad, int color);
+		void fillCircle(number x, number y, number rad, int color);
 		
 		/**
 		 * Create an empty image.
@@ -169,7 +169,7 @@ class Graphics {
 		 * @param height - Image height.
 		 * @param color - A valid color (See ::Color) <b>(optional)</b>.
 		 *
-		 * @return A valid image id.
+		 * @return A valid image ID.
 		 */
 		int createImage(int width, int height, int color);
 		
@@ -184,9 +184,89 @@ class Graphics {
 		 *
 		 * @param filename - Name of the file to open.
 		 *
-		 * @return A valid image id.
+		 * @return A valid image ID.
 		 */
 		int loadImage(string filename);
+		
+		/**
+		 * Save a loaded image to a .png/.bmp image.
+		 * \ingroup Graphics
+		 *
+		 * @par Usage example:
+		 * @code
+		 * Graphics.saveImage(img, "ux0:/data/image.png", FORMAT_PNG)
+		 * @endcode
+		 *
+		 * @param img - A valid image ID.
+		 * @param filename - The filename of the screenshot output.
+		 * @param format - The format to use for the output file <b>(optional)</b>.
+		 *
+		 * @note <b>FORMAT_JPG</b> is not supported.
+		 */
+		void saveImage(int img, string filename, ImgFmt format);
+		
+		/**
+		 * Load a .png/.jpg/.bmp image (asynchronous).
+		 * \ingroup Graphics
+		 *
+		 * @par Usage example:
+		 * @code
+		 * Graphics.loadImageAsync("app0:/image.jpg")
+		 * while System.getAsyncState() == 0 do
+		 * 
+		 * end
+		 * img = System.getAsyncResult()
+		 * @endcode
+		 *
+		 * @param filename - Name of the file to open.
+		 */
+		void loadImageAsync(string filename);
+
+		/**
+		 * Load a .gif animated image.
+		 * \ingroup Graphics
+		 *
+		 * @par Usage example:
+		 * @code
+		 * img = Graphics.loadAnimatedImage("app0:/image.gif")
+		 * @endcode
+		 *
+		 * @param filename - Name of the file to open.
+		 *
+		 * @return A valid image ID.
+		 */
+		int loadAnimatedImage(string filename);
+		
+		/**
+		 * Gets the number of frames of a loaded animated image.
+		 * \ingroup Graphics
+		 *
+		 * @par Usage example:
+		 * @code
+		 * img = Graphics.loadAnimatedImage("app0:/image.gif")
+		 * frames = Graphics.getImageFramesNum(img)
+		 * @endcode
+		 *
+		 * @param img - A valid image ID.
+		 *
+		 * @return The number of frames for the given image.
+		 */
+		int getImageFramesNum(int img);
+		
+		/**
+		 * Set current active frame for a loaded animated image.
+		 * \ingroup Graphics
+		 *
+		 * @par Usage example:
+		 * @code
+		 * img = Graphics.loadAnimatedImage("app0:/image.gif")
+		 * Graphics.setImageFrame(img, 8)
+		 * @endcode
+		 *
+		 * @param img - A valid image ID.
+		 * @param frame - The frame to set as active.
+		 */
+		void setImageFrame(int img, int frame);
 		
 		/**
 		 * Free a loaded image.
@@ -197,7 +277,7 @@ class Graphics {
 		 * Graphics.freeImage(img)
 		 * @endcode
 		 *
-		 * @param img - A valid image id.
+		 * @param img - A valid image ID.
 		 */
 		void freeImage(int img);
 		
@@ -210,7 +290,7 @@ class Graphics {
 		 * Graphics.setImageFilters(img, FILTER_LINEAR, FILTER_LINEAR)
 		 * @endcode
 		 *
-		 * @param img - A valid image id.
+		 * @param img - A valid image ID.
 		 * @param min_filter - Min filter to use.
 		 * @param mag_filter - Mag filter to use.
 		 */
@@ -225,7 +305,7 @@ class Graphics {
 		 * width = Graphics.getImageWidth(img)
 		 * @endcode
 		 *
-		 * @param img - A valid image id.
+		 * @param img - A valid image ID.
 		 * 
 		 * @return The image width in pixels.
 		 */
@@ -240,7 +320,7 @@ class Graphics {
 		 * height = Graphics.getImageHeight(img)
 		 * @endcode
 		 *
-		 * @param img - A valid image id.
+		 * @param img - A valid image ID.
 		 * 
 		 * @return The image height in pixels.
 		 */
@@ -257,7 +337,7 @@ class Graphics {
 		 *
 		 * @param x - X coordinate of the image in pixels.
 		 * @param y - Y coordinate of the image in pixels.
-		 * @param img - A valid image id.
+		 * @param img - A valid image ID.
 		 * @param color - Image tint color (See ::Color) <b>(optional)</b>.
 		 *
 		 */
@@ -274,7 +354,7 @@ class Graphics {
 		 *
 		 * @param x - X coordinate of the image in pixels.
 		 * @param y - Y coordinate of the image in pixels.
-		 * @param img - A valid image id.
+		 * @param img - A valid image ID.
 		 * @param rad - Rotation radius.
 		 * @param color - Image tint color (See ::Color) <b>(optional)</b>.
 		 *
@@ -292,7 +372,7 @@ class Graphics {
 		 *
 		 * @param x - X coordinate of the image in pixels.
 		 * @param y - Y coordinate of the image in pixels.
-		 * @param img - A valid image id.
+		 * @param img - A valid image ID.
 		 * @param x_scale - Scale value for X parameter.
 		 * @param y_scale - Scale value for Y parameter.
 		 * @param color - Image tint color (See ::Color) <b>(optional)</b>.
@@ -311,7 +391,7 @@ class Graphics {
 		 *
 		 * @param x - X coordinate of the image in pixels.
 		 * @param y - Y coordinate of the image in pixels.
-		 * @param img - A valid image id.
+		 * @param img - A valid image ID.
 		 * @param x_start - Image X coordinate for the partial drawing.
 		 * @param y_start - Image Y coordinate for the partial drawing.
 		 * @param width - Partial drawing width.
@@ -332,7 +412,7 @@ class Graphics {
 		 *
 		 * @param x - X coordinate of the image in pixels.
 		 * @param y - Y coordinate of the image in pixels.
-		 * @param img - A valid image id.
+		 * @param img - A valid image ID.
 		 * @param x_start - Image X coordinate for the partial drawing.
 		 * @param y_start - Image Y coordinate for the partial drawing.
 		 * @param width - Partial drawing width.
